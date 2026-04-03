@@ -1,0 +1,100 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Private user profile information.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID." },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string", "format": "uri" },
+        "role": { "type": "string", "enum": ["patient", "doctor", "admin"] },
+        "checkupSettings": {
+          "type": "object",
+          "properties": {
+            "autoBook": { "type": "boolean" },
+            "frequencyMonths": { "type": "number" },
+            "preferredDoctorId": { "type": "string" },
+            "lastCheckupDate": { "type": "string", "format": "date-time" }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Appointment": {
+      "title": "Appointment",
+      "description": "A scheduled medical consultation.",
+      "type": "object",
+      "properties": {
+        "patientId": { "type": "string", "description": "UID of the patient." },
+        "doctorId": { "type": "string", "description": "ID of the doctor." },
+        "doctorName": { "type": "string" },
+        "time": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["Upcoming", "Arrived", "In-Progress", "Completed", "Cancelled"] },
+        "reason": { "type": "string" },
+        "room": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["patientId", "doctorId", "time", "status"]
+    },
+    "HealthRecord": {
+      "title": "HealthRecord",
+      "description": "A medical record or lab result.",
+      "type": "object",
+      "properties": {
+        "patientId": { "type": "string" },
+        "title": { "type": "string" },
+        "clinic": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "status": { "type": "string", "enum": ["Normal", "Abnormal"] },
+        "result": { "type": "string" },
+        "unit": { "type": "string" },
+        "category": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["patientId", "title", "date", "status"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A message in the AI assistant chat.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "assistant"] },
+        "content": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "analysis": {
+          "type": "object",
+          "properties": {
+            "confidence": { "type": "number" },
+            "diagnosis": { "type": "string" },
+            "description": { "type": "string" },
+            "priority": { "type": "string" },
+            "recommendation": { "type": "string" }
+          }
+        }
+      },
+      "required": ["userId", "role", "content", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Private user profiles."
+    },
+    "/appointments/{appointmentId}": {
+      "schema": "Appointment",
+      "description": "Scheduled appointments."
+    },
+    "/records/{recordId}": {
+      "schema": "HealthRecord",
+      "description": "Medical records."
+    },
+    "/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Chat history."
+    }
+  }
+}

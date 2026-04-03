@@ -1,0 +1,8 @@
+{
+  "name": "Antigravity Health",
+  "description": "A polished, editorial-style healthcare platform for providers and patients, featuring AI-driven insights and seamless record management.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
